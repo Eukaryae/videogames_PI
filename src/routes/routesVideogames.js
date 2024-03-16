@@ -1,13 +1,14 @@
 const routesVideogames = require("express").Router()
 const {
     handlerBringAll,
-    handlerBringByID,
-    handlerNewGame
+    // handlerBringByID,
+    handlerNewGame,
+    // handlerSearchName
 } = require("../handlers/handlersVideogames.js")
 
 
-routesVideogames.get("/", handlerBringAll); // get all videogames
 routesVideogames.post("/", handlerNewGame);//ruta para crear o postear actividades
-routesVideogames.get("/:id", handlerBringByID); // get videogames detail with an id
-
+routesVideogames.get("/", handlerBringAll); // get all videogames
+routesVideogames.get("/:id", handlerBringAll); // get videogames detail with an id
+routesVideogames.get("/?name=", handlerBringAll)
 module.exports = routesVideogames;
