@@ -1,23 +1,10 @@
 const { Videogames, Genres } = require('../db.js')
-
-const createGenreInDB = async (response) =>{
+const axios = require('axios')
+require('dotenv').config();
+const { API_URL_GENRES, API_KEY } = process.env;
+const createGenreInDB = async () =>{
     
-    // let arrAllGenres = []
-    let uniqueGenreNames = new Set();
-    
-    // for (const element of response) {
-    //     element.genres.map(async (genre)=> {
-    //         if(!uniqueGenreNames.has(genre.name)){
-    //             uniqueGenreNames.add(genre.name)
-    //             // await Genres.findOrCreate({
-    //             await Genres.create({
-    //                 // where: {name: genre.name},
-    //                 name: genre.name,
-    //                 image_background: genre.image_background
-    //             })
-    //         }
-    //     })
-    // }
+const response = (await axios.get(`${API_URL_GENRES}?key=${API_KEY}`)).data.results
     for (const element of response) {
         for (const genre of element.genres) {
             await Genres.findOrCreate({

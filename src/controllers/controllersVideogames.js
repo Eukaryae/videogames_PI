@@ -4,7 +4,7 @@ const { Videogames, Genres } = require('../db.js')
 const { Op } = require("sequelize");
 const { API_URL, API_KEY } = process.env;
 const importss = require('../../../../videogames100.json')
-const {createGenreInDB} = require('../controllers/controllersGenres.js')
+// const {createGenreInDB} = require('../controllers/controllersGenres.js')
 
 const controllerBringAll = async (idVideogame, nameToSearch) => {
     if(idVideogame){
@@ -41,7 +41,7 @@ const getData_API = async () =>{
                 created: false,
             }
         })
-        const createdGenres = createGenreInDB(response)
+        // const createdGenres = createGenreInDB(response)
         return videogamesData
     }
     const getData_DB = async () => {
@@ -76,7 +76,6 @@ const controllerByID = async ( idVideogame ) => {
         return [response]
     }
     const response = await detail_API(idVideogame)
-    // console.log(response)
     return [response]
 }
 
