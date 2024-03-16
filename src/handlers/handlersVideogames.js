@@ -1,6 +1,5 @@
 const { 
     controllerBringAll,
-    // controllerByID,
     controllerPostNewGame,
 } = require('../controllers/controllersVideogames.js')
 
@@ -9,8 +8,8 @@ const handlerBringAll = async ( req, res ) =>{
     const nameToSearch = req.query.name
     try {
         const response = await controllerBringAll(idVideogame, nameToSearch)
-        if(!response.length || !response){
-            res.status(400).json({error: 'No data found'})
+        if( !response.length){
+            return res.status(400).json({error: 'No data found'})
         }
         res.status(200).json(response)
     } catch (error) {
@@ -18,20 +17,6 @@ const handlerBringAll = async ( req, res ) =>{
         res.status(500).json({error: 'Internal server error'})
     }
 }
-
-// const handlerBringByID = async ( req, res ) =>{
-//     try {
-//         const idVideogame = req.params.id
-//         const response = await controllerByID(idVideogame);
-//         !response
-//         ? console.error("Error in handlerBringByID: ", error) && res.status(400).json({error: 'No data found'})
-//         : res.status(200).json(response)
-//     } catch (error) {
-        
-//         console.error("Error in handlerBringByID: ", error);
-//         res.status(500).json({error: 'Internal server error'})
-//     }
-// }
 
 const handlerNewGame = async ( req, res ) =>{
     try {
@@ -51,24 +36,7 @@ const handlerNewGame = async ( req, res ) =>{
     }
 } 
 
-// const handlerSearchName = async (req, res) =>{
-//     try {
-//         const nameToSearch = req.query.name
-//         if(nameToSearch.length){
-//             throw new Error ("Holaa")
-//         }
-//         console.log(nameToSearch)
-//         // return res.send("Hola")
-        
-//     } catch (error) {
-//         console.error("Error in handlerSearchName: ", error); //error
-//         res.status(500).json({error: 'Internal server error'})
-        
-//     }
-// }
 module.exports = {
     handlerBringAll,
-    // handlerBringByID,
     handlerNewGame,
-    // handlerSearchName
 }

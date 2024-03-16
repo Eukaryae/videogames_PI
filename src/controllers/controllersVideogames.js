@@ -6,7 +6,6 @@ const { API_URL, API_KEY } = process.env;
 const importss = require('../../../../videogames100.json')
 const {createGenreInDB} = require('../controllers/controllersGenres.js')
 
-// let identification = 100;
 const controllerBringAll = async (idVideogame, nameToSearch) => {
     if(idVideogame){
         return controllerByID(idVideogame)
@@ -25,13 +24,13 @@ const getData_API = async () =>{
     // const limit = 100;
     // const perPage = 20
     
-    // let response = []
-    // for(let i=1; i<=5; i++){
+    let response = []
+    for(let i=1; i<=5; i++){
         
-        //     const arrResults = (await axios.get(`${API_URL}?key=${API_KEY}&page=${i}`)).data
-        //     response = response.concat(arrResults.results)
-        // }
-        const response = importss
+            const arrResults = (await axios.get(`${API_URL}?key=${API_KEY}&page=${i}`)).data
+            response = response.concat(arrResults.results)
+        }
+        // const response = importss
         const videogamesData = response.map(({id, name, image, rating, genres}) =>{
             return {
                 id: id,
@@ -74,10 +73,11 @@ const getData_API = async () =>{
 const controllerByID = async ( idVideogame ) => {
     if(isNaN(idVideogame)){
         const response = await detail_DB(idVideogame)
-        return response
+        return [response]
     }
     const response = await detail_API(idVideogame)
-    return response
+    // console.log(response)
+    return [response]
 }
 
 const detail_DB = async ( idVideogame ) => {
@@ -89,8 +89,7 @@ const detail_DB = async ( idVideogame ) => {
 const detail_API = async ( idVideogame ) => {
     const response = (await axios.get(`${API_URL}/${idVideogame}?key=${API_KEY}`)).data
     if(!response) throw new Error ("Couldn't get detail info from server")
-    // const cleanResponse = cleanerFunction(response)
-    // const cleanResponse = cleanerFunction([response])
+
     const cleanResponse = {
         name: response.name,
         image: response.background_image,
@@ -124,7 +123,6 @@ const controllerPostNewGame = async ( newGame ) =>{
         newGame.genres.map( async (genre) => {
             //Busca en countries segun la id dentro de inCountries
             const genreName = await Genres.findOne({where: {name: genre}});
-            // console.log(genreName);
             // // relaciona la actividad al país o paises donde se realiza
             genreName && await game.addGenre(genreName);
         })
@@ -154,9 +152,7 @@ const controllerSearchedName = async ( nameToSearch ) =>{
         }]
 
     })
-    // if(!responseDB.length) throw new Error ("Couldn't get search info from server")
     const response = [...responseDB, ...responseAPI]
-    // if(!response.length) return false
 
     const modifiedResponse = response.map(element => {
         return {
@@ -165,14 +161,11 @@ const controllerSearchedName = async ( nameToSearch ) =>{
             name: element.name,
             image: element.image,
             rating: element.rating,
-            // genres: element.genres.map(({name}) => name),
             genres: typeof(element.genres[0]) !== "string" ? element.genres.map((genre)=> genre.name) : element.genre,
             created: element.created,
         }
     });
-    
     return modifiedResponse;
-    // return response
 }
     
 module.exports = {
